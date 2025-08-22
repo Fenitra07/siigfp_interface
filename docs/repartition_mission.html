@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CDP - Répartition par Mission</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-in-out",
+              "slide-up": "slideUp 0.3s ease-out",
+              "pulse-soft": "pulseSoft 2s infinite",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      @keyframes pulseSoft {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+      .glass-effect {
+        background: #ffffff6a;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-200 text-gray-800 font-sans">
+    <div class="container mx-auto p-6">
+      <!-- Header -->
+      <div class="mb-8 animate-fade-in">
+        <h1 class="text-4xl font-bold text-black mb-2 tracking-wide">
+          CDP - Répartition par Mission
+        </h1>
+        <div class="text-sm text-gray-600 mb-2">
+          - Les ministères ont 1, 2 ou au maximum 3 missions
+        </div>
+        <div class="text-sm text-gray-600 mb-4">
+          - Base de saisie > Montant modifiés N-1
+        </div>
+        <div
+          class="w-32 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+        ></div>
+      </div>
+
+      <!-- Situation de saisie -->
+      <div
+        class="glass-effect rounded-xl p-6 mb-8 animate-slide-up"
+        style="animation-delay: 0.1s"
+      >
+        <div class="overflow-x-auto">
+          <table class="w-full bg-white rounded-lg shadow-lg">
+            <thead>
+              <tr>
+                <th class="py-3 px-4"></th>
+                <th
+                  class="bg-[#ebebeb] text-black py-3 px-4 text-center font-medium rounded-tl-lg"
+                >
+                  Montant à répartir
+                </th>
+                <th
+                  class="bg-[#ebebeb] text-black py-3 px-4 text-center font-medium rounded-tr-lg"
+                >
+                  Montant réparti
+                </th>
+              </tr>
+            </thead>
+            <tbody id="situationTable">
+              <!-- Les lignes seront générées par JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tableau principal de répartition -->
+      <div
+        class="glass-effect rounded-xl p-6 mb-8 animate-slide-up"
+        style="animation-delay: 0.2s"
+      >
+        <div class="overflow-x-auto">
+          <table class="w-full bg-white rounded-lg shadow-lg">
+            <thead>
+              <tr class="bg-[#ebebeb] text-black">
+                <th class="py-3 px-4 text-center font-medium rounded-tl-lg">
+                  Code Mission
+                </th>
+                <th class="py-3 px-4 text-center font-medium">
+                  Libellé Mission
+                </th>
+                <th class="py-3 px-4 text-center font-medium">BS</th>
+                <th class="py-3 px-4 text-center font-medium">Transfert</th>
+                <th class="py-3 px-4 text-center font-medium">Indemnité</th>
+                <th class="py-3 px-4 text-center font-medium">PIP interne</th>
+                <th class="py-3 px-4 text-center font-medium rounded-tr-lg">
+                  PIP externe
+                </th>
+              </tr>
+            </thead>
+            <tbody id="missionTable">
+              <!-- Les lignes seront générées par JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Bouton Enregistrer -->
+      <div
+        class="flex justify-end animate-slide-up"
+        style="animation-delay: 0.3s"
+      >
+        <button
+          id="enregistrerBtn"
+          class="px-8 py-3 bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] hover:from-[#6B3FE0] hover:to-[#8A74FF] text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl animate-pulse-soft"
+        >
+          <svg
+            class="w-5 h-5 inline mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+            ></path>
+          </svg>
+          Enregistrer
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Données de test pour la situation de saisie
+      const situationData = [
+        { type: "BS", aRepartir: 0, reparti: 0 },
+        { type: "Transfert", aRepartir: 0, reparti: 0 },
+        { type: "Indemnité", aRepartir: 0, reparti: 0 },
+        { type: "PIP interne", aRepartir: 0, reparti: 0 },
+        { type: "PIP externe", aRepartir: 0, reparti: 0 },
+      ];
+
+      // Données de test pour les missions
+      const missionData = [
+        {
+          codeMission: "760",
+          libelleMission: "Population et développement",
+          bs: 0,
+          transfert: 0,
+          indemnite: 0,
+          pipInterne: 0,
+          pipExterne: 0,
+        },
+        {
+          codeMission: "762",
+          libelleMission: "Développement social",
+          bs: 0,
+          transfert: 0,
+          indemnite: 0,
+          pipInterne: 0,
+          pipExterne: 0,
+        },
+        {
+          codeMission: "770",
+          libelleMission: "Protection sociale",
+          bs: 0,
+          transfert: 0,
+          indemnite: 0,
+          pipInterne: 0,
+          pipExterne: 0,
+        },
+      ];
+
+      // Initialisation
+      document.addEventListener("DOMContentLoaded", function () {
+        initSituationTable();
+        initMissionTable();
+        initEventListeners();
+
+        // Animation d'entrée séquentielle
+        setTimeout(() => {
+          document
+            .querySelectorAll(".animate-slide-up")
+            .forEach((el, index) => {
+              el.style.animationDelay = `${index * 0.1}s`;
+            });
+        }, 100);
+      });
+
+      function initSituationTable() {
+        const tbody = document.getElementById("situationTable");
+        situationData.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.className =
+            "border-b border-slate-300 hover:bg-slate-50 transition-colors duration-200";
+          tr.innerHTML = `
+                    <td class="py-3 px-4 bg-[#ebebeb] text-black font-medium">${row.type}</td>
+                    <td class="py-3 px-4 text-center bg-white hover:bg-slate-200 transition-colors duration-200">
+                        <input type="number" value="${row.aRepartir}" 
+                               class="w-full text-center border-0 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 text-black"
+                               onchange="updateSituationValue(${index}, 'aRepartir', this.value)">
+                    </td>
+                    <td class="py-3 px-4 bg-white text-center hover:bg-slate-200 transition-colors duration-200">
+                        <input type="number" value="${row.reparti}" 
+                               class="w-full text-center border-0 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 text-black"
+                               onchange="updateSituationValue(${index}, 'reparti', this.value)">
+                    </td>
+                `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function initMissionTable() {
+        const tbody = document.getElementById("missionTable");
+
+        missionData.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.className =
+            "border-b hover:bg-slate-50 transition-all duration-200";
+          tr.innerHTML = `
+                    <td class="py-3 px-4 text-center text-black font-medium bg-[#ebebeb]">${row.codeMission}</td>
+                    <td class="py-3 px-4 text-left text-black bg-[#ebebeb]">${row.libelleMission}</td>
+                    <td class="py-3 px-4 text-center">
+                        <input type="number" value="${row.bs}" 
+                               class="w-full text-center border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateMissionValue(${index}, 'bs', this.value)">
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <input type="number" value="${row.transfert}" 
+                               class="w-full text-center border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateMissionValue(${index}, 'transfert', this.value)">
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <input type="number" value="${row.indemnite}" 
+                               class="w-full text-center border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateMissionValue(${index}, 'indemnite', this.value)">
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <input type="number" value="${row.pipInterne}" 
+                               class="w-full text-center border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateMissionValue(${index}, 'pipInterne', this.value)">
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <input type="number" value="${row.pipExterne}" 
+                               class="w-full text-center border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateMissionValue(${index}, 'pipExterne', this.value)">
+                    </td>
+                `;
+          tbody.appendChild(tr);
+        });
+
+        // Ajouter la ligne total
+        const totalRow = document.createElement("tr");
+        totalRow.className = "bg-[#ebebeb] text-black font-semibold";
+        totalRow.innerHTML = `
+                <td colspan="2" class="py-3 px-4 text-center">Total grande rubrique</td>
+                <td class="py-3 px-4 text-center" id="totalBS">0</td>
+                <td class="py-3 px-4 text-center" id="totalTransfert">0</td>
+                <td class="py-3 px-4 text-center" id="totalIndemnite">0</td>
+                <td class="py-3 px-4 text-center" id="totalPipInterne">0</td>
+                <td class="py-3 px-4 text-center" id="totalPipExterne">0</td>
+            `;
+        tbody.appendChild(totalRow);
+      }
+
+      function initEventListeners() {
+        // Bouton enregistrer
+        document
+          .getElementById("enregistrerBtn")
+          .addEventListener("click", function () {
+            // Animation de succès
+            this.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Enregistré !
+                `;
+            this.classList.add("bg-green-500", "hover:bg-green-600");
+            this.classList.remove(
+              "bg-gradient-to-r",
+              "from-orange-500",
+              "to-orange-600",
+              "hover:from-orange-600",
+              "hover:to-orange-700"
+            );
+
+            setTimeout(() => {
+              this.innerHTML = `
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                        </svg>
+                        Enregistrer
+                    `;
+              this.classList.remove("bg-green-500", "hover:bg-green-600");
+              this.classList.add(
+                "bg-gradient-to-r",
+                "from-orange-500",
+                "to-orange-600",
+                "hover:from-orange-600",
+                "hover:to-orange-700"
+              );
+            }, 2000);
+          });
+      }
+
+      function updateSituationValue(index, field, value) {
+        situationData[index][field] = parseFloat(value) || 0;
+
+        // Animation de validation
+        event.target.classList.add("bg-green-100");
+        setTimeout(() => {
+          event.target.classList.remove("bg-green-100");
+        }, 300);
+      }
+
+      function updateMissionValue(index, field, value) {
+        missionData[index][field] = parseFloat(value) || 0;
+        updateTotals();
+
+        // Animation de validation
+        event.target.classList.add("bg-blue-100");
+        setTimeout(() => {
+          event.target.classList.remove("bg-blue-100");
+        }, 300);
+      }
+
+      function updateTotals() {
+        const totals = {
+          bs: missionData.reduce((sum, row) => sum + row.bs, 0),
+          transfert: missionData.reduce((sum, row) => sum + row.transfert, 0),
+          indemnite: missionData.reduce((sum, row) => sum + row.indemnite, 0),
+          pipInterne: missionData.reduce((sum, row) => sum + row.pipInterne, 0),
+          pipExterne: missionData.reduce((sum, row) => sum + row.pipExterne, 0),
+        };
+
+        document.getElementById("totalBS").textContent = totals.bs;
+        document.getElementById("totalTransfert").textContent =
+          totals.transfert;
+        document.getElementById("totalIndemnite").textContent =
+          totals.indemnite;
+        document.getElementById("totalPipInterne").textContent =
+          totals.pipInterne;
+        document.getElementById("totalPipExterne").textContent =
+          totals.pipExterne;
+
+        // Animation des totaux
+        Object.keys(totals).forEach((key) => {
+          const element = document.getElementById(
+            `total${key.charAt(0).toUpperCase() + key.slice(1)}`
+          );
+          if (element) {
+            element.style.transform = "scale(1.1)";
+            setTimeout(() => {
+              element.style.transform = "scale(1)";
+            }, 200);
+          }
+        });
+      }
+
+      // Animation au scroll
+      window.addEventListener("scroll", function () {
+        const elements = document.querySelectorAll(".glass-effect");
+        elements.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.8) {
+            el.style.transform = "translateY(0)";
+            el.style.opacity = "1";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

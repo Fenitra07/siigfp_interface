@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opérateur - Création ligne de crédit</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-in-out",
+              "slide-up": "slideUp 0.3s ease-out",
+              "pulse-soft": "pulseSoft 2s infinite",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      @keyframes pulseSoft {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+      .glass-effect {
+        background: #ffffff6a;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-200 text-gray-800 font-sans">
+    <div class="container mx-auto p-6">
+      <!-- Header -->
+      <div class="mb-8 animate-fade-in">
+        <h1 class="text-4xl font-bold text-black mb-2 tracking-wide">
+          Opérateur - Création ligne de crédit
+        </h1>
+        <div
+          class="w-32 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+        ></div>
+      </div>
+
+      <div class="flex gap-6">
+        <!-- Section principale gauche -->
+        <div class="flex-1">
+          <!-- Informations SOA -->
+          <div class="glass-effect rounded-xl p-6 mb-8 animate-slide-up">
+            <h2 class="text-xl font-semibold text-black mb-4 flex items-center">
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              &lt;&lt; Informations SOA &gt;&gt;
+            </h2>
+          </div>
+
+          <!-- Création ligne de crédit -->
+          <div
+            class="glass-effect rounded-xl p-6 mb-8 animate-slide-up"
+            style="animation-delay: 0.1s"
+          >
+            <h2 class="text-xl font-semibold text-black mb-6 flex items-center">
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                ></path>
+              </svg>
+              Création ligne de crédit
+            </h2>
+
+            <div class="grid grid-cols-2 gap-6">
+              <!-- Colonne gauche -->
+              <div class="space-y-4">
+                <!-- Catégorie -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Catégorie</label
+                  >
+                  <button
+                    id="categorieBtn"
+                    class="w-full px-4 py-3 bg-[#ebebeb] hover:bg-gray-300 text-black font-medium rounded-lg transition-all duration-300 text-left border border-gray-300"
+                  >
+                    &lt;&lt; Choix catégorie &gt;&gt;
+                  </button>
+                </div>
+
+                <!-- Grande rubrique -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Grande rubrique</label
+                  >
+                  <button
+                    id="grandeRubriqueBtn"
+                    class="w-full px-4 py-3 bg-[#ebebeb] hover:bg-gray-300 text-black font-medium rounded-lg transition-all duration-300 text-left border border-gray-300"
+                  >
+                    &lt;&lt; Choix GRD &gt;&gt;
+                  </button>
+                </div>
+
+                <!-- Convention -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Convention</label
+                  >
+                  <button
+                    id="conventionBtn"
+                    class="w-full px-4 py-3 bg-[#ebebeb] hover:bg-gray-300 text-black font-medium rounded-lg transition-all duration-300 text-left border border-gray-300"
+                  >
+                    &lt;&lt; Choix GRD &gt;&gt;
+                  </button>
+                </div>
+
+                <!-- Compte -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Compte</label
+                  >
+                  <button
+                    id="compteBtn"
+                    class="w-full px-4 py-3 bg-[#ebebeb] hover:bg-gray-300 text-black font-medium rounded-lg transition-all duration-300 text-left border border-gray-300"
+                  >
+                    &lt;&lt; Choix Pcop&gt;&gt;
+                  </button>
+                </div>
+
+                <!-- Financement -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Financement</label
+                  >
+                  <button
+                    id="financementBtn"
+                    class="w-full px-4 py-3 bg-[#ebebeb] hover:bg-gray-300 text-black font-medium rounded-lg transition-all duration-300 text-left border border-gray-300"
+                  >
+                    &lt;&lt; Choix financement &gt;&gt;
+                  </button>
+                </div>
+
+                <!-- Moyen -->
+                <div>
+                  <label class="block text-black font-medium mb-2">Moyen</label>
+                  <button
+                    id="moyenBtn"
+                    class="w-full px-4 py-3 bg-[#ebebeb] hover:bg-gray-300 text-black font-medium rounded-lg transition-all duration-300 text-left border border-gray-300"
+                  >
+                    &lt;&lt; Choix moyen&gt;&gt;
+                  </button>
+                </div>
+              </div>
+
+              <!-- Colonne droite -->
+              <div class="space-y-4">
+                <!-- Prévision 2026 -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Prévision 2026</label
+                  >
+                  <input
+                    type="number"
+                    value="0"
+                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                  />
+                </div>
+
+                <!-- Prévision 2027 -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Prévision 2027</label
+                  >
+                  <input
+                    type="number"
+                    value="0"
+                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                  />
+                </div>
+
+                <!-- Prévision 2028 -->
+                <div>
+                  <label class="block text-black font-medium mb-2"
+                    >Prévision 2028</label
+                  >
+                  <input
+                    type="number"
+                    value="0"
+                    class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Boutons d'action -->
+          <div
+            class="flex gap-4 justify-end animate-slide-up"
+            style="animation-delay: 0.3s"
+          >
+            <button
+              id="enregistrerBtn"
+              class="px-8 py-3 bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] hover:from-[#6B3FE0] hover:to-[#8A74FF] text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+            >
+              <svg
+                class="w-5 h-5 inline mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+                ></path>
+              </svg>
+              Enregistrer
+            </button>
+
+            <button
+              id="fermerBtn"
+              class="px-8 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-orange-700 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+            >
+              <svg
+                class="w-5 h-5 inline mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+              Fermer
+            </button>
+          </div>
+        </div>
+
+        <!-- Section Règles de gestions -->
+        <div class="w-80">
+          <div
+            class="glass-effect rounded-xl p-6 animate-slide-up bg-gray-800"
+            style="animation-delay: 0.2s"
+          >
+            <h2 class="text-xl font-semibold text-white mb-4 flex items-center">
+              <svg
+                class="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              Règles de gestions
+            </h2>
+            <div class="text-white text-sm space-y-3 leading-relaxed">
+              <div>
+                <span class="font-medium">- GRD:</span> La liste des Grandes
+                Rubriques dépend de la catégorie choisie
+              </div>
+              <div>
+                <span class="font-medium">- Compte:</span> La liste des comptes
+                dépend du choix de la catégorie et de la GRD
+              </div>
+              <div>
+                <span class="font-medium">- Convention:</span> le choix varie en
+                fonction du GRD ou de la catégorie (par défaut 000), idem pour
+                le financement et le code moyen
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Données de test
+      const formData = {
+        categorie: "",
+        grandeRubrique: "",
+        convention: "",
+        compte: "",
+        financement: "",
+        moyen: "",
+        prevision2026: 0,
+        prevision2027: 0,
+        prevision2028: 0,
+      };
+
+      // Initialisation
+      document.addEventListener("DOMContentLoaded", function () {
+        initEventListeners();
+
+        // Animation d'entrée séquentielle
+        setTimeout(() => {
+          document
+            .querySelectorAll(".animate-slide-up")
+            .forEach((el, index) => {
+              el.style.animationDelay = `${index * 0.1}s`;
+            });
+        }, 100);
+      });
+
+      function initEventListeners() {
+        // Boutons de sélection
+        const selectButtons = [
+          "categorieBtn",
+          "grandeRubriqueBtn",
+          "conventionBtn",
+          "compteBtn",
+          "financementBtn",
+          "moyenBtn",
+        ];
+
+        selectButtons.forEach((buttonId) => {
+          document
+            .getElementById(buttonId)
+            .addEventListener("click", function () {
+              const buttonText = this.textContent.trim();
+              showModal(`Sélection ${buttonText.replace(/[<>]/g, "")}`);
+            });
+        });
+
+        // Bouton enregistrer
+        document
+          .getElementById("enregistrerBtn")
+          .addEventListener("click", function () {
+            // Animation de succès
+            this.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Enregistré !
+                `;
+            this.classList.add("bg-green-500", "hover:bg-green-600");
+            this.classList.remove("from-[#7C4DFF]", "to-[#9E86FF]");
+
+            setTimeout(() => {
+              this.innerHTML = `
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                        </svg>
+                        Enregistrer
+                    `;
+              this.classList.remove("bg-green-500", "hover:bg-green-600");
+              this.classList.add("from-[#7C4DFF]", "to-[#9E86FF]");
+              this.className = this.className.replace(
+                "bg-green-500 hover:bg-green-600",
+                "bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] hover:from-[#6B3FE0] hover:to-[#8A74FF]"
+              );
+            }, 2000);
+          });
+
+        // Bouton fermer
+        document
+          .getElementById("fermerBtn")
+          .addEventListener("click", function () {
+            // Animation de fermeture
+            this.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Fermé !
+                `;
+
+            setTimeout(() => {
+              // Simuler la fermeture de la fenêtre
+              document.body.style.opacity = "0";
+              setTimeout(() => {
+                alert("Fenêtre fermée (simulation)");
+                document.body.style.opacity = "1";
+                this.innerHTML = `
+                            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Fermer
+                        `;
+              }, 500);
+            }, 1000);
+          });
+
+        // Gestion des inputs
+        document.querySelectorAll('input[type="number"]').forEach((input) => {
+          input.addEventListener("change", function () {
+            // Animation de validation
+            this.classList.add("bg-blue-100");
+            setTimeout(() => {
+              this.classList.remove("bg-blue-100");
+            }, 300);
+          });
+        });
+      }
+
+      function showModal(title) {
+        // Créer une modal simple avec animation
+        const modal = document.createElement("div");
+        modal.className =
+          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 transition-opacity duration-300";
+        modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300">
+                    <h3 class="text-lg font-semibold mb-4 text-black">${title}</h3>
+                    <p class="text-gray-600 mb-4">Fonctionnalité à implémenter...</p>
+                    <div class="flex gap-2">
+                        <button onclick="closeModal(this)" class="px-4 py-2 bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] text-white rounded hover:opacity-90 transition-all duration-300 flex-1">
+                            Sélectionner
+                        </button>
+                        <button onclick="closeModal(this)" class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition-colors">
+                            Annuler
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        document.body.appendChild(modal);
+
+        // Animation d'ouverture
+        setTimeout(() => {
+          modal.classList.remove("opacity-0");
+          modal.querySelector("div").classList.remove("scale-95");
+        }, 10);
+      }
+
+      function closeModal(btn) {
+        const modal = btn.closest(".fixed");
+        modal.classList.add("opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+
+        setTimeout(() => {
+          modal.remove();
+        }, 300);
+      }
+
+      // Animation au scroll
+      window.addEventListener("scroll", function () {
+        const elements = document.querySelectorAll(".glass-effect");
+        elements.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.8) {
+            el.style.transform = "translateY(0)";
+            el.style.opacity = "1";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

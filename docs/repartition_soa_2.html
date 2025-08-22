@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RDP - Répartition par SOA</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            animation: {
+              "fade-in": "fadeIn 0.5s ease-in-out",
+              "slide-up": "slideUp 0.3s ease-out",
+              "pulse-soft": "pulseSoft 2s infinite",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+      @keyframes pulseSoft {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+      .glass-effect {
+        background: #ffffff6a;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-200 text-gray-800 font-sans">
+    <div class="container mx-auto p-6">
+      <!-- Header -->
+      <div class="mb-8 animate-fade-in">
+        <h1 class="text-4xl font-bold text-black mb-2 tracking-wide">
+          RDP - Répartition par SOA
+        </h1>
+        <div
+          class="w-32 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+        ></div>
+      </div>
+
+      <!-- Filtres de recherche -->
+      <div class="glass-effect rounded-xl p-6 mb-8 animate-slide-up">
+        <h2 class="text-xl font-semibold text-black mb-4 flex items-center">
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+            ></path>
+          </svg>
+          Filtre de recherche
+        </h2>
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <button
+              id="missionBtn"
+              class="w-full px-4 py-3 bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] hover:opacity-90 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            >
+              &lt;&lt; Choix Mission &gt;&gt;
+            </button>
+          </div>
+          <div class="flex-1">
+            <button
+              id="programmeBtn"
+              class="w-full px-4 py-3 bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] hover:opacity-90 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            >
+              &lt;&lt; Choix Programme &gt;&gt;
+            </button>
+          </div>
+          <div class="flex-1">
+            <button
+              id="soaBtn"
+              class="w-full px-4 py-3 bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] hover:opacity-90 text-white font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+            >
+              &lt;&lt; Choix SOA &gt;&gt;
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Situation de saisie -->
+      <div
+        class="glass-effect rounded-xl p-6 mb-8 animate-slide-up"
+        style="animation-delay: 0.1s"
+      >
+        <h2 class="text-xl font-semibold text-black mb-6 flex items-center">
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            ></path>
+          </svg>
+          Situation de saisie
+        </h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="text-left py-3 px-4"></th>
+                <th
+                  class="bg-[#ebebeb] text-black py-3 px-4 font-medium text-center rounded-tl-lg"
+                >
+                  Montant à répartir
+                </th>
+                <th
+                  class="bg-[#ebebeb] text-black py-3 px-4 font-medium text-center rounded-tr-lg"
+                >
+                  Montant réparti
+                </th>
+              </tr>
+            </thead>
+            <tbody id="situationTable">
+              <!-- Les lignes seront générées par JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Saisie -->
+      <div
+        class="glass-effect rounded-xl p-6 mb-8 animate-slide-up"
+        style="animation-delay: 0.2s"
+      >
+        <h2 class="text-xl font-semibold text-black mb-6 flex items-center">
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            ></path>
+          </svg>
+          Saisie
+        </h2>
+
+        <!-- Tableau de saisie étendu -->
+        <div class="overflow-x-auto">
+          <table class="w-full bg-white rounded-lg shadow-lg">
+            <thead>
+              <tr class="bg-[#ebebeb] text-black">
+                <th class="py-3 px-2 text-center font-medium text-sm rounded-tl-lg">Code SOA</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Libellé SOA</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Cat</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">GRD</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Compte</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Libellé</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Conv</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Financement</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Moyen</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Prév. 2026</th>
+                <th class="py-3 px-2 text-center font-medium text-sm">Prév. 2027</th>
+                <th class="py-3 px-2 text-center font-medium text-sm rounded-tr-lg">Prév. 2028</th>
+              </tr>
+            </thead>
+            <tbody id="saisieTable">
+              <!-- Les lignes seront générées par JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div
+        class="flex justify-between items-center animate-slide-up"
+        style="animation-delay: 0.3s"
+      >
+        <button
+          id="ajouterLigneBtn"
+          class="px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+        >
+          <svg
+            class="w-5 h-5 inline mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          Ajouter ligne
+        </button>
+
+        <button
+          id="enregistrerBtn"
+          class="px-8 py-3 bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF] hover:from-[#6B3FE0] hover:to-[#8A74FF] text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl animate-pulse-soft"
+        >
+          <svg
+            class="w-5 h-5 inline mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+            ></path>
+          </svg>
+          Enregistrer
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Données de test
+      const situationData = [
+        { type: "BS", aRepartir: 0, reparti: 0 },
+        { type: "Transfert", aRepartir: 0, reparti: 0 },
+        { type: "Indemnité", aRepartir: 0, reparti: 0 },
+        { type: "PIP interne", aRepartir: 0, reparti: 0 },
+        { type: "PIP externe", aRepartir: 0, reparti: 0 },
+      ];
+
+      const saisieData = [
+        {
+          codeSOA: "00-02-1-A10-00000",
+          libelleSOA: "SOA A",
+          cat: "3",
+          grd: "BS",
+          compte: "6131",
+          libelle: "Promotion de l'Amélioration...",
+          conv: "000",
+          financement: "10-001-001-A",
+          moyen: "00-00-00-00-00",
+          prev2026: 0,
+          prev2027: 0,
+          prev2028: 0,
+        },
+        {
+          codeSOA: "00-02-1-B10-00000",
+          libelleSOA: "SOA B",
+          cat: "3",
+          grd: "BS",
+          compte: "6263",
+          libelle: "Administration de Coordination",
+          conv: "000",
+          financement: "10-001-001-A",
+          moyen: "00-00-00-00-00",
+          prev2026: 0,
+          prev2027: 0,
+          prev2028: 0,
+        },
+        {
+          codeSOA: "00-02-1-C10-00000",
+          libelleSOA: "SOA C",
+          cat: "3",
+          grd: "BS",
+          compte: "6216",
+          libelle: "Promotion sociale",
+          conv: "000",
+          financement: "10-001-001-A",
+          moyen: "00-00-00-00-00",
+          prev2026: 0,
+          prev2027: 0,
+          prev2028: 0,
+        },
+      ];
+
+      // Initialisation
+      document.addEventListener("DOMContentLoaded", function () {
+        initSituationTable();
+        initSaisieTable();
+        initEventListeners();
+
+        // Animation d'entrée séquentielle
+        setTimeout(() => {
+          document
+            .querySelectorAll(".animate-slide-up")
+            .forEach((el, index) => {
+              el.style.animationDelay = `${index * 0.1}s`;
+            });
+        }, 100);
+      });
+
+      function initSituationTable() {
+        const tbody = document.getElementById("situationTable");
+        situationData.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.className =
+            "border-b border-slate-300 hover:bg-slate-100 transition-colors duration-200";
+          tr.innerHTML = `
+                    <td class="py-3 px-4 bg-[#ebebeb] text-black font-medium">${row.type}</td>
+                    <td class="py-3 px-4 text-center bg-white hover:bg-slate-200 transition-colors duration-200">
+                        <input type="number" value="${row.aRepartir}" 
+                               class="w-full text-center border-0 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 text-black"
+                               onchange="updateValue(${index}, 'aRepartir', this.value)">
+                    </td>
+                    <td class="py-3 px-4 bg-white text-center hover:bg-slate-200 transition-colors duration-200">
+                        <input type="number" value="${row.reparti}" 
+                               class="w-full text-center border-0 bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1 text-black"
+                               onchange="updateValue(${index}, 'reparti', this.value)">
+                    </td>
+                `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function initSaisieTable() {
+        const tbody = document.getElementById("saisieTable");
+        saisieData.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.className =
+            "border-b hover:bg-gray-50 transition-all duration-200";
+          tr.innerHTML = `
+                    <td class="py-2 px-2 text-black text-sm font-mono">${row.codeSOA}</td>
+                    <td class="py-2 px-2 text-black text-sm">${row.libelleSOA}</td>
+                    <td class="py-2 px-2 text-black text-sm text-center">${row.cat}</td>
+                    <td class="py-2 px-2 text-black text-sm text-center">${row.grd}</td>
+                    <td class="py-2 px-2 text-black text-sm text-center">${row.compte}</td>
+                    <td class="py-2 px-2 text-black text-sm">${row.libelle}</td>
+                    <td class="py-2 px-2 text-black text-sm text-center">${row.conv}</td>
+                    <td class="py-2 px-2 text-black text-sm font-mono">${row.financement}</td>
+                    <td class="py-2 px-2 text-black text-sm font-mono">${row.moyen}</td>
+                    <td class="py-2 px-2 text-center">
+                        <input type="number" value="${row.prev2026}" 
+                               class="w-full text-center border border-slate-300 rounded px-1 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateSaisieValue(${index}, 'prev2026', this.value)">
+                    </td>
+                    <td class="py-2 px-2 text-center">
+                        <input type="number" value="${row.prev2027}" 
+                               class="w-full text-center border border-slate-300 rounded px-1 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateSaisieValue(${index}, 'prev2027', this.value)">
+                    </td>
+                    <td class="py-2 px-2 text-center">
+                        <input type="number" value="${row.prev2028}" 
+                               class="w-full text-center border border-slate-300 rounded px-1 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-black"
+                               onchange="updateSaisieValue(${index}, 'prev2028', this.value)">
+                    </td>
+                `;
+          tbody.appendChild(tr);
+        });
+
+        // Ajouter la ligne total
+        const totalRow = document.createElement("tr");
+        totalRow.className = "bg-[#ebebeb] text-black font-semibold";
+        totalRow.innerHTML = `
+                <td colspan="9" class="py-3 px-2 text-center font-bold">Total</td>
+                <td class="py-3 px-2 text-center font-bold" id="total2026">0</td>
+                <td class="py-3 px-2 text-center font-bold" id="total2027">0</td>
+                <td class="py-3 px-2 text-center font-bold" id="total2028">0</td>
+            `;
+        tbody.appendChild(totalRow);
+      }
+
+      function initEventListeners() {
+        // Bouton ajouter ligne
+        document
+          .getElementById("ajouterLigneBtn")
+          .addEventListener("click", function () {
+            // Animation de confirmation
+            this.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Ligne ajoutée !
+                `;
+
+            setTimeout(() => {
+              this.innerHTML = `
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Ajouter ligne
+                    `;
+            }, 2000);
+          });
+
+        // Bouton enregistrer
+        document
+          .getElementById("enregistrerBtn")
+          .addEventListener("click", function () {
+            // Animation de succès
+            this.innerHTML = `
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Enregistré !
+                `;
+            this.classList.add("bg-green-500", "hover:bg-green-600");
+            this.classList.remove("bg-gradient-to-r", "from-[#7C4DFF]", "to-[#9E86FF]", "hover:from-[#6B3FE0]", "hover:to-[#8A74FF]");
+
+            setTimeout(() => {
+              this.innerHTML = `
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                        </svg>
+                        Enregistrer
+                    `;
+              this.classList.remove("bg-green-500", "hover:bg-green-600");
+              this.classList.add("bg-gradient-to-r", "from-[#7C4DFF]", "to-[#9E86FF]", "hover:from-[#6B3FE0]", "hover:to-[#8A74FF]");
+            }, 2000);
+          });
+
+        // Boutons de filtre
+        document
+          .getElementById("missionBtn")
+          .addEventListener("click", function () {
+            showModal("Sélection Mission");
+          });
+
+        document
+          .getElementById("programmeBtn")
+          .addEventListener("click", function () {
+            showModal("Sélection Programme");
+          });
+
+        document
+          .getElementById("soaBtn")
+          .addEventListener("click", function () {
+            showModal("Sélection SOA");
+          });
+      }
+
+      function updateValue(index, field, value) {
+        situationData[index][field] = parseFloat(value) || 0;
+
+        // Animation de validation
+        event.target.classList.add("bg-green-100");
+        setTimeout(() => {
+          event.target.classList.remove("bg-green-100");
+        }, 300);
+      }
+
+      function updateSaisieValue(index, field, value) {
+        saisieData[index][field] = parseFloat(value) || 0;
+        updateTotals();
+
+        // Animation de validation
+        event.target.classList.add("bg-blue-100");
+        setTimeout(() => {
+          event.target.classList.remove("bg-blue-100");
+        }, 300);
+      }
+
+      function updateTotals() {
+        const total2026 = saisieData.reduce((sum, row) => sum + row.prev2026, 0);
+        const total2027 = saisieData.reduce((sum, row) => sum + row.prev2027, 0);
+        const total2028 = saisieData.reduce((sum, row) => sum + row.prev2028, 0);
+        
+        document.getElementById("total2026").textContent = total2026;
+        document.getElementById("total2027").textContent = total2027;
+        document.getElementById("total2028").textContent = total2028;
+
+        // Animation des totaux
+        ["total2026", "total2027", "total2028"].forEach(id => {
+          const element = document.getElementById(id);
+          element.style.transform = "scale(1.1)";
+          setTimeout(() => {
+            element.style.transform = "scale(1)";
+          }, 200);
+        });
+      }
+
+      function showModal(title) {
+        // Créer une modal simple avec animation
+        const modal = document.createElement("div");
+        modal.className =
+          "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 transition-opacity duration-300";
+        modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300">
+                    <h3 class="text-lg font-semibold mb-4 text-black">${title}</h3>
+                    <p class="text-gray-600 mb-4">Fonctionnalité à implémenter...</p>
+                    <button onclick="closeModal(this)" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                        Fermer
+                    </button>
+                </div>
+            `;
+
+        document.body.appendChild(modal);
+
+        // Animation d'ouverture
+        setTimeout(() => {
+          modal.classList.remove("opacity-0");
+          modal.querySelector("div").classList.remove("scale-95");
+        }, 10);
+      }
+
+      function closeModal(btn) {
+        const modal = btn.closest(".fixed");
+        modal.classList.add("opacity-0");
+        modal.querySelector("div").classList.add("scale-95");
+
+        setTimeout(() => {
+          modal.remove();
+        }, 300);
+      }
+
+      // Animation au scroll
+      window.addEventListener("scroll", function () {
+        const elements = document.querySelectorAll(".glass-effect");
+        elements.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.8) {
+            el.style.transform = "translateY(0)";
+            el.style.opacity = "1";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
