@@ -1,0 +1,5 @@
+// package.json
+"scripts": {
+  "build": "tailwindcss -i ./src/styles/tailwind.css -o ./docs/css/main.css --minify",
+  "dev": "tailwindcss -i ./src/styles/tailwind.css -o ./docs/css/main.css -w"
+}

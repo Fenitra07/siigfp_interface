@@ -1,0 +1,30 @@
+@layer components {
+  .glass-effect {
+    background: #ffffff6a;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    @apply rounded-lg; /* on peut mixer Tailwind + CSS natif */
+  }
+
+  .btn-gradient {
+    @apply px-4 py-2 rounded-lg font-medium text-white
+           bg-gradient-to-r from-[#7C4DFF] to-[#9E86FF]
+           transition-all duration-300 hover:opacity-90;
+  }
+}
+@layer utilities {
+  .animate-fade-in {
+    @apply animate__animated animate__fadeIn;
+  }
+    .animate-fade-out {
+        @apply animate__animated animate__fadeOut;
+    }
+  .animate-pulse-soft {
+    @apply animate-pulse;
+  }
+
+  .transition-all {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}
